@@ -6,24 +6,52 @@ using System.Linq;
 
 class Person
 {
-    public string title { get; set; }
-    public string name { get; set; }
-    public string dob { get; set; }
-    public string phone { get; set; }
-    public string ssn { get; set; }
-    public string blood { get; set; }
+    public string title { get; set; } = "";
+    public string name { get; set; } = "";
+    public string dob { get; set; } = "";
+    public string phone { get; set; } = "";
+    public string ssn { get; set; } = "";
+    public string blood { get; set; } = "";
+    public string height { get; set; } = "";
+    public string weight { get; set; } = "";
+    public ConsoleColor color { get; set; } = ConsoleColor.White;
 }
 
 class personGenerator
 {
     static Random numberGen = new Random();
     static List<Person> savedPeople = new List<Person>();
+    static List<Person> specialPeople = new List<Person>()
+    {
+        new Person()
+        {
+            name = "Jesus Christ II",
+            dob = "December 26, 2000",
+            phone = "(666)-REA-LGOD",
+            ssn = "JC2-69-LOLZ",
+            height = "God height, like in space",
+            weight = "0 pounds",
+            blood = "Rhnull",
+            color = ConsoleColor.Yellow
+        },
+        new Person()
+        {
+            name = "Glorpius Maximus",
+            dob = "March 20, 863",
+            phone = "(863)-MAX-1337",
+            ssn = "GLOR-PI-US0",
+            height = "20 foot, 13 inches",
+            weight = "1,337 pounds",
+            blood = "ABO+-",
+            color = ConsoleColor.DarkMagenta
+        },
+    };
     static Person currentPerson;
     static string spj = "savedPeople.json";
 
     static void StartMsg()
     {
-        Console.ForegroundColor = ConsoleColor.Red;
+        Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.WriteLine("*PATCHY'S PERSON GENERATOR*");
         Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine("Enter to generate a person. Backspace to end. 'S' to save. 'L' to load. 'Z' to delete.");
@@ -104,7 +132,14 @@ class personGenerator
                     }
                     else
                     {
-                        Console.WriteLine($"\nName:  {loadedPerson.name}\nDoB:   {loadedPerson.dob}\nPhone: {loadedPerson.phone}\nSSN:   {loadedPerson.ssn}\nBlood: {loadedPerson.blood}\n");
+                        Person specialMatch = specialPeople.Find(n => n.name == loadedPerson.name);
+                        if (specialMatch != null)
+                        {
+                            Console.ForegroundColor = specialMatch.color;
+                        }
+                        
+                        Console.WriteLine($"\nName:   {loadedPerson.name}\nDoB:    {loadedPerson.dob}\nPhone:  {loadedPerson.phone}\nSSN:    {loadedPerson.ssn}\nHeight: {loadedPerson.height}\nWeight: {loadedPerson.weight}\nBlood:  {loadedPerson.blood}\n");
+                        Console.ForegroundColor = ConsoleColor.White;
                         StartMsg();
                     }
                 }
@@ -134,7 +169,7 @@ class personGenerator
                         savedPeople.Remove(deadPerson);
                         SaveToFile();
 
-                        Console.WriteLine($"You just murdered {deadPerson.name}.\n");
+                        Console.WriteLine($"You have murdered {deadPerson.name}.\n");
                         StartMsg();
                     }
                 }
@@ -145,54 +180,89 @@ class personGenerator
 
     static void PersonGen()
     {
-        string[] firstNameOptions = { "Glorpus","Jeremey","Johnny","Alien","Salty","Marmite","Jackinator","Fergie","Terrence","Foobles","Jesussy","Tameron","Pearrick","Samthony","Jerb","Dorito","Baller","Big","Kilgore","Serge","Cumsock","Lil'","Goobie","Unt","Poggies","Linguistin","Napolon","Zamboner","Satan","Waltah","Poig","Hummus" };
-        string[] lastNameOptions = { "Goobenstein","Cashew","McNutt","Frederick","Car","Junjimun","White","Baldur","Smithsonian","Bird","Hawk","Dove","Long","Funkytown","Sunch","Vietnam","Gunk","Krunk","Poe","Xalgawrath","Lump","Reddit","Unjewlateor","Mildew","Lagunbath","Narmels","Dunlavey","Frazier","Craig","Hamilicious","Xanax","the Ejackulator" };
-        string[] monthOptions = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-        string[] bloodTypeOptions = { "O-","O+","B-","B+","A-","A+","AB-","AB+" };
-
-        int firstNameIndex = numberGen.Next(firstNameOptions.Length);
-        int lastNameIndex = numberGen.Next(lastNameOptions.Length);
-        int monthIndex = numberGen.Next(monthOptions.Length);
-        int bloodTypeIndex = numberGen.Next(bloodTypeOptions.Length);
-    
-        string firstName = firstNameOptions[firstNameIndex];
-        string lastName = lastNameOptions[lastNameIndex];
-        string month = monthOptions[monthIndex];
-        string blood = bloodTypeOptions[bloodTypeIndex];
-
-        int day = numberGen.Next(1, 32);
-        int year = numberGen.Next(1925, 2009);
-        int phac = numberGen.Next(100, 1000);
-        int ph1 = numberGen.Next(0, 1000);
-        int ph2 = numberGen.Next(0, 10000);
-        int ssac = numberGen.Next(0, 1000);
-        int ss1 = numberGen.Next(0, 100);
-        int ss2 = numberGen.Next(0, 10000);
-
-        if (month == "February" && (day > 28))
+        int specialChance = numberGen.Next(0, 100);
+        if (specialChance == 0)
         {
-            day = 28;
+            Person special = specialPeople[numberGen.Next(specialPeople.Count)];
+
+            Console.ForegroundColor = special.color;
+            Console.WriteLine($"\nName:   {special.name}\nDoB:    {special.dob}\nPhone:  {special.phone}\nSSN:    {special.ssn}\nHeight: {special.height}\nWeight: {special.weight}\nBlood:  {special.blood}");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Person n = new Person();
+            n.name = special.name;
+            n.dob = special.dob;
+            n.phone = special.phone;
+            n.ssn = special.ssn;
+            n.height = special.height;
+            n.weight = special.weight;
+            n.blood = special.blood;
+
+            currentPerson = n;
         }
-        if ((month == "April" || month == "June" || month == "September" || month == "November") && day > 30)
+        else
         {
-            day = 30;
+            string[] firstNameOptions = { "Feronius", "Jeremey", "Johnny", "Alien", "Salty", "Marmite", "Jackinator", "Fergie", "Terrence", "Foobles", "Jesussy", "Tameron", "Pearrick", "Samthony", "Jerb", "Dorito", "Baller", "Big", "Kilgore", "Serge", "Cumsock", "Lil'", "Goobie", "Unt", "Poggie", "Linguistin", "Napolon", "Zamboner", "Satan", "Waltah", "Poig", "Hummus", "Loo-key", "Bogan", "Karmic", "Jarvis", "Linus", "Bimbo", "Onkibent", "Nurmbul", "Scrumtuddle", "Larry", "Ankle", "Flurbie", "Markus", "Agent", "Zarbel", "Kim", "Dronald", "Querf", "Baby", "Patchy", "Lopsided", "Azula", "Mickey", "Baja", "Banana", "Pim", "Swedish", "Porkinator" };
+            string[] lastNameOptions = { "Goobenstein", "Cashew", "McNutt", "Frederick", "Car", "Junjimun", "White", "Baldur", "Smithsonian", "Bird", "Hawk", "Dove", "Long", "Funkytown", "Sunch", "Vietnam", "Gunk", "Krunk", "Poe", "Xalgawrath", "Lump", "Reddit", "Unjewlateor", "Mildew", "Lagunbath", "Narmels", "Dunlavey", "Frazier", "Craig", "Hamilicious", "Xanax", "the Ejackulator", "Fanning", "Kirbs", "Tromp", "Munkihunk", "Loog", "Clapper", "Blast", "Reagun", "Prumple", "Boggles", "Forty-Seven", "Buchanan", "Vikavub", "Jones", "Williams", "Dom", "Deryl", "Curdle", "Boobies", "Honkledonkledoo", "Jong-Oon", "Italy", "Teletubbie", "Dildo", "Dompler", "Pimling", "Milkertonishkovski", "Fish" };
+            string[] monthOptions = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+            string[] bloodTypeOptions = { "O-", "O+", "B-", "B+", "A-", "A+", "AB-", "AB+" };
+
+            int firstNameIndex = numberGen.Next(firstNameOptions.Length);
+            int lastNameIndex = numberGen.Next(lastNameOptions.Length);
+            int monthIndex = numberGen.Next(monthOptions.Length);
+            int bloodTypeIndex = numberGen.Next(bloodTypeOptions.Length);
+
+            string firstName = firstNameOptions[firstNameIndex];
+            string lastName = lastNameOptions[lastNameIndex];
+            string month = monthOptions[monthIndex];
+            string blood = bloodTypeOptions[bloodTypeIndex];
+
+            int day = numberGen.Next(1, 32);
+            int year = numberGen.Next(1925, 2009);
+            int phac = numberGen.Next(100, 1000);
+            int ph1 = numberGen.Next(0, 1000);
+            int ph2 = numberGen.Next(0, 10000);
+            int ssac = numberGen.Next(0, 1000);
+            int ss1 = numberGen.Next(0, 100);
+            int ss2 = numberGen.Next(0, 10000);
+            int ft = numberGen.Next(3, 8);
+            int inc = numberGen.Next(1, 13);
+            int lbs = numberGen.Next(60, 251);
+
+            if ((month == "February") && (day > 28))
+            {
+                day = 28;
+            }
+            if ((month == "April" || month == "June" || month == "September" || month == "November") && (day > 30))
+            {
+                day = 30;
+            }
+            if (inc > 11)
+            {
+                ft += 1;
+                inc = 0;
+            }
+
+            string name = $"{firstName} {lastName}";
+            string phone = $"({phac})-{ph1:D3}-{ph2:D4}";
+            string dob = $"{month} {day}, {year}";
+            string ssn = $"{ssac:D3}-{ss1:D2}-{ss2:D4}";
+            string height = $"{ft} foot, {inc} inches";
+            string weight = $"{lbs} pounds";
+
+            Console.WriteLine($"\nName:   {name}\nDoB:    {dob}\nPhone:  {phone}\nSSN:    {ssn}\nHeight: {height}\nWeight: {weight}\nBlood:  {blood}");
+
+            Person n = new Person();
+            n.name = name;
+            n.dob = dob;
+            n.phone = phone;
+            n.ssn = ssn;
+            n.height = height;
+            n.weight = weight;
+            n.blood = blood;
+
+            currentPerson = n;
         }
-        
-        string name = $"{firstName} {lastName}";
-        string phone = $"({phac})-{ph1:D3}-{ph2:D4}";
-        string dob = $"{month} {day}, {year}";
-        string ssn = $"{ssac:D3}-{ss1:D2}-{ss2:D4}";
-
-        Console.WriteLine($"\nName:  {name}\nDoB:   {dob}\nPhone: {phone}\nSSN:   {ssn}\nBlood: {blood}");
-
-        Person n = new Person();
-        n.name = name;
-        n.dob = dob;
-        n.phone = phone;
-        n.ssn = ssn;
-        n.blood = blood;
-
-        currentPerson = n;
     }
 
     static void SaveToFile()
